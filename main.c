@@ -35,19 +35,26 @@ int getNeighbors(unsigned long num, int i)
 	int hasLeft = i != 0 && (i % ROW_CELLS) - 1 == (i - 1) % ROW_CELLS;
 	int hasRight = i != (TOTAL_CELLS - 1) && (i % ROW_CELLS) + 1 == (i + 1) % ROW_CELLS;
 
-	int neighbors = 0;
+	// need 1 to be an unsigned long or implicit typing messes us up
 	unsigned long x = 1;
 
-	neighbors += hasUp && (num & (x << (i - ROW_CELLS))) > 0;
-	neighbors += hasUp && hasLeft && (num & (x << (i - ROW_CELLS - 1))) > 0;
-	neighbors += hasUp && hasRight && (num & (x << (i - ROW_CELLS + 1))) > 0;
-	neighbors += hasDown && (num & (x << (i + ROW_CELLS))) > 0;
-	neighbors += hasDown && hasLeft && (num & (x << (i + ROW_CELLS - 1))) > 0;
-	neighbors += hasDown && hasRight && (num & (x << (i + ROW_CELLS + 1))) > 0;
-	neighbors += hasLeft && (num & (x << (i - 1))) > 0;
-	neighbors += hasRight && (num & (x << (i + 1))) > 0;
-
-	return neighbors;
+	return
+		// up
+		(hasUp && (num & (x << (i - ROW_CELLS))) > 0) +
+		// up left
+		(hasUp && hasLeft && (num & (x << (i - ROW_CELLS - 1))) > 0) +
+		// up right
+		(hasUp && hasRight && (num & (x << (i - ROW_CELLS + 1))) > 0) +
+		// down
+		(hasDown && (num & (x << (i + ROW_CELLS))) > 0) +
+		// down left
+		(hasDown && hasLeft && (num & (x << (i + ROW_CELLS - 1))) > 0) +
+		// down right
+		(hasDown && hasRight && (num & (x << (i + ROW_CELLS + 1))) > 0) +
+		// left
+		(hasLeft && (num & (x << (i - 1))) > 0) +
+		// right
+		(hasRight && (num & (x << (i + 1))) > 0);
 }
 // ======================================================================== //
 
